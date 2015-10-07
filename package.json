@@ -4,13 +4,13 @@
   "description": "Provides authentication functionality for isomorphic-react-base-app.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel -d lib/ src/"
   },
-  "repository":
-  {
+  "repository": {
     "type": "git",
     "url": "https://github.com/spanias/isomorphic-react-authentication"
-  }
+  },
   "keywords": [
     "authentication",
     "react",
