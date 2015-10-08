@@ -111,7 +111,7 @@ class AuthenticationComponent extends React.Component {
 
             if (this.refs.userInput.getValue() !== "" && this.refs.passInput.getValue() !== "") {
                 //Authentication Service called here.
-                context.executeAction(LoginActions, ["Login", {
+                context.executeAction(AuthenticationActions, ["Login", {
                     username: this.refs.userInput.getValue(),
                     password: this.refs.passInput.getValue()
                 }]);
@@ -126,7 +126,7 @@ class AuthenticationComponent extends React.Component {
         }
         else
         {
-            context.executeAction(LoginActions, ["Logout", null]);
+            context.executeAction(AuthenticationActions, ["Logout", null]);
         }
     }
 
