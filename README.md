@@ -35,3 +35,27 @@ and within the render jsx
 
 	<AuthenticationComponent />
 
+#Customization
+
+Add the following in your custom .less file
+
+    // Authentication Component properties
+    .loginError {
+      font-size: 12px;
+      font-style: oblique;
+      color: red;
+    }
+    .loginNormal {
+      font-size: 12px;
+      font-style: oblique;
+      color: darkgray;
+    }
+    .login-modal-title {
+      font-size: 22px;
+      text-align: center;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+    .login-modal-header {
+      padding-right: 15px;
+    }
