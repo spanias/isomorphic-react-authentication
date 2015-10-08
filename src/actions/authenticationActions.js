@@ -29,7 +29,7 @@ export default function (context, payload, done) {
             break;
 
         case "Logout":
-            var store = context.getStore(loginStore).getState();
+            var store = context.getStore(AuthenticationStore).getState();
             if (store.loggedIn){
                 context.dispatch(Actions.LOGOUT_ACTION, null)
             }
