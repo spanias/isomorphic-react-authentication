@@ -6,7 +6,7 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {ButtonToolbar, Button, Input, Row, Col, Alert, Panel} from 'react-bootstrap';
-import {Image} from 'react-bootstrap';
+import {Image, Label} from 'react-bootstrap';
 import AuthenticationActions  from '../actions/authenticationActions';
 import AuthenticationStore from '../stores/authenticationStore';
 
@@ -91,8 +91,28 @@ class AuthenticationUserView extends React.Component {
             "border-radius": '50px',
             "width": '125px',
             "height": '140px',
-            "padding-bottom": "20px"
+            "padding-bottom": "20px",
+            "margin-left": "40px",
+            "margin-top": "10px"
         };
+
+        var usernamediv = {
+            "padding-bottom": "20px",
+            "margin-top": "40px"
+        };
+        var usernamelabelspan = {
+            "font-size": "24px",
+            "font-weight": "bold"
+        };
+        var usernamespan = {
+            "font-size": "24px",
+            "padding-left": "5px"
+        };
+        var verifiedlabel = <span><Label bsSize="xs" bsStyle="danger">Unverified</Label></span>;
+        if (this.state.verified)
+        {
+            verifiedlabel = <span><Label bsSize="xs" bsStyle="success">Verified</Label></span>;
+        }
         //if there is a user logged in show the user view
         /*
          <Col xs={6}><Image src={this.state.imageurl} circle /></Col>
@@ -105,7 +125,7 @@ class AuthenticationUserView extends React.Component {
                     <Panel header="User Information" bsStyle="primary">
                         <Row>
                             <Col xs={6}><img src={this.state.imageurl} style={avatarstyle} className="authenticationUserView-avatar"/></Col>
-                            <Col xs={6}><h3>Username:</h3> <h4>{this.state.user}</h4></Col>
+                            <Col xs={6}><div style={usernamediv}><span style={usernamelabelspan}>Username:</span> <span style={usernamespan}>{this.state.user}</span> </div></Col>
                         </Row>
                         <Row>
                             <Col xs={6}>
@@ -124,12 +144,13 @@ class AuthenticationUserView extends React.Component {
                             </Col>
                         </Row>
                         <Row>
-                            <Col xs={6}>
+                            <Col xs={12}>
                                 <Input
                                     type="text"
                                     placeholder="someone@somewhere.com"
                                     label="E-Mail Address"
-                                    value={this.state.email} />
+                                    value={this.state.email}
+                                    addonAfter={verifiedlabel}/>
                             </Col>
                         </Row>
                     </Panel>

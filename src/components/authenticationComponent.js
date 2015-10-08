@@ -41,7 +41,7 @@ class AuthenticationComponent extends React.Component {
             this.setState({
 
                 mainbuttontext: "Logout",
-                headertext: "User details: " + nextProps.user,
+                headertext: "User Profile",
                 actionbuttontext: "Sign Out",
                 message: "",//"You are already signed in as " + nextProps.user + " who is a user in group: " + nextProps.group,
                 messageclass: "info"
@@ -71,7 +71,8 @@ class AuthenticationComponent extends React.Component {
 
     _hideModal() {
         this.setState({
-            show: false
+            show: false,
+            message: ""
         });
     }
 
