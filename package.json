@@ -1,6 +1,6 @@
 {
   "name": "isomorphic-react-authentication",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Provides authentication functionality for isomorphic-react-base-app.",
   "main": "lib/index.js",
   "scripts": {
