@@ -2,26 +2,13 @@
  * Copyright 2015, Digital Optimization Group, LLC.
  * Copyrights licensed under the APACHE 2 License. See the accompanying LICENSE file for terms.
  */
-/**
-var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
-var _interopRequireWildcard = require('babel-runtime/helpers/interop-require-wildcard')['default'];
-
-var React = _interopRequireDefault(require('react'))['default'];
-var connectToStores = require('fluxible-addons-react').connectToStores;
-var ButtonToolbar = require('react-bootstrap').ButtonToolbar;
-var Modal = require('react-bootstrap').Modal;
-var Button = require('react-bootstrap').Button;
-var Input = require('react-bootstrap').Input;
-var Row = require('react-bootstrap').Row;
-var Col = require('react-bootstrap').Col;
-var Alert = require('react-bootstrap').Alert;
-**/
 
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {ButtonToolbar, Modal, Button, Input, Row, Col, Alert, ModalTrigger} from 'react-bootstrap';
 import AuthenticationActions  from '../actions/authenticationActions';
 import AuthenticationStore from '../stores/authenticationStore';
+import AuthenticationUserView from './authenticationUserView';
 
 class AuthenticationComponent extends React.Component {
 
@@ -56,7 +43,7 @@ class AuthenticationComponent extends React.Component {
                 mainbuttontext: "Logout",
                 headertext: "User details: " + nextProps.user,
                 actionbuttontext: "Sign Out",
-                message: "You are already signed in as " + nextProps.user + " who is a user in group: " + nextProps.group,
+                message: "",//"You are already signed in as " + nextProps.user + " who is a user in group: " + nextProps.group,
                 messageclass: "info"
             });
         }
@@ -194,6 +181,7 @@ class AuthenticationComponent extends React.Component {
                     <Modal.Body>
                         {form}
                         {alert}
+                        <AuthenticationUserView />
                     </Modal.Body>
                     <Modal.Footer>
                         <Button onClick={this._hideModal}>Close</Button>
