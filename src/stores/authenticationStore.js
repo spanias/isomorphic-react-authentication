@@ -17,6 +17,9 @@ class AuthenticationStore extends BaseStore {
             jwt: null,
             email: null,
             group: null,
+            firstname: null,
+            lastname: null,
+            imageurl: null,
             verified: false
         };
     }
@@ -31,6 +34,9 @@ class AuthenticationStore extends BaseStore {
                 jwt: payload,
                 group: decoded.group,
                 email: decoded.email,
+                firstname: decoded.firstname,
+                lastname: decoded.lastname,
+                imageurl: decoded.imageurl,
                 verified: decoded.verified
             };
         } catch(err) {
@@ -42,14 +48,15 @@ class AuthenticationStore extends BaseStore {
                 jwt: null,
                 email: null,
                 group: null,
+                firstname: null,
+                lastname: null,
+                imageurl: null,
                 verified: false
             };
         }
-        //this.propStore = payload;
         this.emitChange();
     }
     loginFailedAction(payload) {
-        //this.propStore = payload;
         this.propStore = {
             loggedIn: false,
             attempts: this.propStore.attempts +1,
@@ -57,6 +64,9 @@ class AuthenticationStore extends BaseStore {
             jwt: null,
             email: null,
             group: null,
+            firstname: null,
+            lastname: null,
+            imageurl: null,
             verified: false
         };
 
@@ -70,10 +80,11 @@ class AuthenticationStore extends BaseStore {
             jwt: null,
             email: null,
             group: null,
+            firstname: null,
+            lastname: null,
+            imageurl: null,
             verified: false
         };
-
-        //this.propStore = payload;
         this.emitChange();
     }
     getState() {
@@ -95,8 +106,3 @@ AuthenticationStore.handlers = {
 };
 
 export default AuthenticationStore;
-/*
-exports.__esModule = true;
-exports['default'] = AuthenticationStore;
-module.exports = exports['default'];
-    */

@@ -6,6 +6,7 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {ButtonToolbar, Button, Input, Row, Col, Alert, Panel} from 'react-bootstrap';
+import {Image} from 'react-bootstrap';
 import AuthenticationActions  from '../actions/authenticationActions';
 import AuthenticationStore from '../stores/authenticationStore';
 
@@ -15,21 +16,27 @@ class AuthenticationUserView extends React.Component {
         super();
         this.state = {
             visible: false,
+            imageurl:"",
             user: "",
-            FirstName: "",
-            LastName: "",
+            firstname: "",
+            lastname: "",
             email:"",
             verified: "",
             group: ""
         };
-
         this._refreshStateWithProps = this._refreshStateWithProps.bind(this);
-        this._login = this._login.bind(this);
-        this._handleKeyPress = this._handleKeyPress.bind(this);
-    }
 
+        this._refreshStateWithProps(props);
+
+        //this._handleKeyPress = this._handleKeyPress.bind(this);
+    }
+    componentDidMount()
+    {
+        console.log("authenticationUserView: didMount ->", this.props);
+        this._refreshStateWithProps(this.props);
+    }
     componentWillReceiveProps(nextProps) {
-        console.log("authenticationUserView: Receiving new props ->", nextProps);
+        console.log("authenticationUserView: willReceiveProps ->", nextProps);
         this._refreshStateWithProps(nextProps);
     }
 
@@ -38,8 +45,9 @@ class AuthenticationUserView extends React.Component {
             this.setState({
                 visible: true,
                 user: nextProps.user,
-                FirstName: "",
-                LastName: "",
+                imageurl: nextProps.imageurl,
+                firstname: nextProps.firstname,
+                lastname: nextProps.lastname,
                 email: nextProps.email,
                 verified: nextProps.verified,
                 group: nextProps.group
@@ -49,46 +57,88 @@ class AuthenticationUserView extends React.Component {
             this.setState({
                 visible: false,
                 user: "",
-                FirstName: "",
-                LastName: "",
+                imageurl:"",
+                firstname: "",
+                lastname: "",
                 email:"",
                 verified: "",
                 group: ""
             });
         }
     }
-
+    /*
     _handleKeyPress(event)
     {
         //console.log("Keypress event ->", event);
         var charCode = event.which || event.charCode || event.keyCode || 0;
         //console.log("charCode ->", charCode);
         if (charCode === 13) {
-            this._login(event);
+
         }
     }
+    */
+
 
     render() {
+
+        console.log("authenticationUserView: rendering");
         //Contains the main component (empty if not logged in)
         var userview =
             <div className="authentication-userview-group">
             </div>;
 
-
+        var avatarstyle = {
+            "border-radius": '50px',
+            "width": '125px',
+            "height": '140px',
+            "padding-bottom": "20px"
+        };
         //if there is a user logged in show the user view
+        /*
+         <Col xs={6}><Image src={this.state.imageurl} circle /></Col>
+         <Col xs={6}><h5>Username: {this.state.user}</h5></Col>
+        */
+
         if (this.props.loggedIn){
             userview =
                 <div className="authentication-userview-group">
-                    <Panel header="User Information">
-                        <Input value={this.state.FirstName} />
-                        <Input value={this.state.LastName} />
+                    <Panel header="User Information" bsStyle="primary">
+                        <Row>
+                            <Col xs={6}><img src={this.state.imageurl} style={avatarstyle} className="authenticationUserView-avatar"/></Col>
+                            <Col xs={6}><h5>Username:</h5> <h4>{this.state.user}</h4></Col>
+                        </Row>
+                        <Row>
+                            <Col xs={6}>
+                                <Input
+                                    type="text"
+                                    placeholder="Enter text"
+                                    label="First Name"
+                                    value={this.state.firstname} />
+                            </Col>
+                            <Col xs={6}>
+                                <Input
+                                    type="text"
+                                    placeholder="Enter text"
+                                    label="Last Name"
+                                    value={this.state.lastname} />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col xs={6}>
+                                <Input
+                                    type="text"
+                                    placeholder="someone@somewhere.com"
+                                    label="E-Mail Address"
+                                    value={this.state.email} />
+                            </Col>
+                        </Row>
                     </Panel>
                 </div>;
         }
-
-
         return (
-            {component}
+            <div>
+                {userview}
+            </div>
         );
     }
 }
