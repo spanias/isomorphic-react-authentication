@@ -16,8 +16,8 @@ export default function (context, payload, done) {
 
     switch(payload[0]){
         case "Login":
-            console.log("Reading authenticationService ->", payload[1]);
-            context.service.read('authenticationService', payload[1], {}, function (err, token) {
+            console.log("Reading AuthenticationService ->", payload[1]);
+            context.service.read('AuthenticationService', payload[1], {}, function (err, token) {
                  if (err || !token) {
                  context.dispatch(Actions.LOGINFAILED_ACTION, err);
                  } else {
