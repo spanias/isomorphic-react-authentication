@@ -96,7 +96,7 @@ class AuthenticationUserView extends React.Component {
         //if there is a user logged in show the user view
         /*
          <Col xs={6}><Image src={this.state.imageurl} circle /></Col>
-         <Col xs={6}><h5>Username: {this.state.user}</h5></Col>
+
         */
 
         if (this.props.loggedIn){
@@ -105,7 +105,7 @@ class AuthenticationUserView extends React.Component {
                     <Panel header="User Information" bsStyle="primary">
                         <Row>
                             <Col xs={6}><img src={this.state.imageurl} style={avatarstyle} className="authenticationUserView-avatar"/></Col>
-                            <Col xs={6}><h5>Username:</h5> <h4>{this.state.user}</h4></Col>
+                            <Col xs={6}><h3>Username:</h3> <h4>{this.state.user}</h4></Col>
                         </Row>
                         <Row>
                             <Col xs={6}>
