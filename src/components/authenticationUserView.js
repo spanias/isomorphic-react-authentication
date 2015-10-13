@@ -28,7 +28,8 @@ class AuthenticationUserView extends React.Component {
 
         this._refreshStateWithProps(props);
 
-        //this._handleKeyPress = this._handleKeyPress.bind(this);
+        this._handleEmailInput = this._handleEmailInput.bind(this);
+        this._validateEmail = this._validateEmail.bind(this);
     }
     componentDidMount()
     {
@@ -66,6 +67,24 @@ class AuthenticationUserView extends React.Component {
             });
         }
     }
+
+    _validateEmail() {
+        // regex from http://stackoverflow.com/questions/46155/validate-email-address-in-javascript
+        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        if  (re.test(this.state.email))
+        {
+            return 'success';
+        }
+        else {
+            return 'error';
+        }
+    }
+    _handleEmailInput(){
+    this.setState({
+        email: this.refs.email.getValue()
+    });
+}
     /*
     _handleKeyPress(event)
     {
@@ -87,6 +106,17 @@ class AuthenticationUserView extends React.Component {
             <div className="authentication-userview-group">
             </div>;
 
+
+        var verifiedlabel = <span><Label bsSize="xs" bsStyle="danger">Unverified</Label></span>;
+        if (this.state.verified)
+        {
+            verifiedlabel = <span><Label bsSize="xs" bsStyle="success">Verified</Label></span>;
+        }
+        //if there is a user logged in show the user view
+        /*
+         <Col xs={6}><Image src={this.state.imageurl} circle /></Col>
+
+        */
         var avatarstyle = {
             "border-radius": '50px',
             "width": '125px',
@@ -108,16 +138,6 @@ class AuthenticationUserView extends React.Component {
             "font-size": "24px",
             "padding-left": "5px"
         };
-        var verifiedlabel = <span><Label bsSize="xs" bsStyle="danger">Unverified</Label></span>;
-        if (this.state.verified)
-        {
-            verifiedlabel = <span><Label bsSize="xs" bsStyle="success">Verified</Label></span>;
-        }
-        //if there is a user logged in show the user view
-        /*
-         <Col xs={6}><Image src={this.state.imageurl} circle /></Col>
-
-        */
 
         if (this.props.loggedIn){
             userview =
@@ -150,9 +170,15 @@ class AuthenticationUserView extends React.Component {
                                     placeholder="someone@somewhere.com"
                                     label="E-Mail Address"
                                     value={this.state.email}
-                                    addonAfter={verifiedlabel}/>
+                                    addonAfter={verifiedlabel}
+                                    ref="email"
+                                    bsStyle={this._validateEmail()}
+                                    defaultValue={this.state.email}
+                                    onChange={this._handleEmailInput}
+                                    />
                             </Col>
                         </Row>
+                        <Button >Save</Button>
                     </Panel>
                 </div>;
         }
