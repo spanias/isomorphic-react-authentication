@@ -19,7 +19,9 @@
   "author": "Digital Optimization Group LLC",
   "license": "ISC",
   "dependencies": {
-    "jsonwebtoken": "^5.4.0"
+    "aws-dynamodb": "^0.1.45",
+    "jsonwebtoken": "^5.4.0",
+    "password-hash-and-salt": "^0.1.2"
   },
   "devDependencies": {
     "babel-runtime": "^5.8.25",

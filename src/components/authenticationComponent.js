@@ -10,6 +10,8 @@ import AuthenticationActions  from '../actions/authenticationActions';
 import AuthenticationStore from '../stores/authenticationStore';
 import AuthenticationUserView from './authenticationUserView';
 
+var debugauth = require('debug')('AuthenticationComponent');
+
 class AuthenticationComponent extends React.Component {
 
     constructor(props, context) {
@@ -28,13 +30,18 @@ class AuthenticationComponent extends React.Component {
         this._hideModal = this._hideModal.bind(this);
         this._login = this._login.bind(this);
         this._handleKeyPress = this._handleKeyPress.bind(this);
+        this.loginwithtoken = this.loginwithtoken.bind(this);
     }
 
+    componentDidMount(){
+        if (!this.state.loggedIn) {
+            this.loginwithtoken();
+        }
+    }
     componentWillReceiveProps(nextProps) {
-        console.log("loginElement: Receiving new props ->", nextProps);
+        debugauth("AuthenticationComponent: Receiving new props ->", nextProps);
         this._refreshStateWithProps(nextProps);
     }
-
 
     _refreshStateWithProps(nextProps) {
         if (typeof nextProps !== "undefined" && nextProps.loggedIn) {
@@ -55,9 +62,14 @@ class AuthenticationComponent extends React.Component {
                 message: "",
                 messageclass: "danger"
             });
-            if (typeof nextProps !== "undefined" && nextProps.attempts > 0) {
+            if (typeof nextProps !== "undefined" && nextProps.attempts > 0 ) {
                 this.setState({
                     message: "Username and password combination invalid!"
+                });
+            }
+            if (typeof nextProps !== "undefined" && nextProps.errormessage) {
+                this.setState({
+                    message: nextProps.errormessage
                 });
             }
         }
@@ -78,14 +90,21 @@ class AuthenticationComponent extends React.Component {
 
     _handleKeyPress(event)
     {
-        //console.log("Keypress event ->", event);
+        //debugauth("Keypress event ->", event);
         var charCode = event.which || event.charCode || event.keyCode || 0;
-        //console.log("charCode ->", charCode);
+        //debugauth("charCode ->", charCode);
         if (charCode === 13) {
             this._login(event);
         }
     }
 
+
+    loginwithtoken() {
+        if (!this.state.loggedIn) {
+            //Authentication Service called here.
+            context.executeAction(AuthenticationActions, ["LoginWithToken", {}]);
+        }
+    }
 
     _login(event) {
         event.preventDefault();
@@ -96,14 +115,13 @@ class AuthenticationComponent extends React.Component {
                 messageclass: "info"
             });
 
-
             if (this.refs.userInput.getValue() !== "" && this.refs.passInput.getValue() !== "") {
                 //Authentication Service called here.
                 context.executeAction(AuthenticationActions, ["Login", {
                     username: this.refs.userInput.getValue(),
-                    password: this.refs.passInput.getValue()
+                    password: this.refs.passInput.getValue(),
+                    rememberme: this.refs.remembermeInput.getChecked()
                 }]);
-
             }
             else {
                 this.setState({
@@ -155,6 +173,7 @@ class AuthenticationComponent extends React.Component {
                         </Col>
                         <Col xs={6}>
                             <Input type="password" ref="passInput" placeholder="Password" onKeyPress={this._handleKeyPress}/>
+                            <Input type="checkbox" label="Remember me" ref="remembermeInput" />
                         </Col>
                     </Row>
                 </div>;

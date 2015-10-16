@@ -2,10 +2,10 @@
  * Copyright 2015, Digital Optimization Group, LLC.
  * Copyrights licensed under the APACHE 2 License. See the accompanying LICENSE file for terms.
  */
-
+var debug = require('debug');
+var debugauth = debug('AuthenticationStore');
 import {BaseStore} from 'fluxible/addons';
 import Actions from "../actions/constant";
-var jwt = require('jsonwebtoken');
 
 class AuthenticationStore extends BaseStore {
     constructor(dispatcher) {
@@ -20,46 +20,44 @@ class AuthenticationStore extends BaseStore {
             firstname: null,
             lastname: null,
             imageurl: null,
-            verified: false
+            verified: false,
+            errormessage: null
         };
     }
     loginAction(payload) {
-        var key = 'private';
-        try {
-            var decoded = jwt.verify(payload, key);
-            this.propStore = {
-                loggedIn: true,
-                attempts: 0,
-                user: decoded.user,
-                jwt: payload,
-                group: decoded.group,
-                email: decoded.email,
-                firstname: decoded.firstname,
-                lastname: decoded.lastname,
-                imageurl: decoded.imageurl,
-                verified: decoded.verified
-            };
-        } catch(err) {
-            // err
-            this.propStore = {
-                loggedIn: false,
-                attempts: 0,
-                user: null,
-                jwt: null,
-                email: null,
-                group: null,
-                firstname: null,
-                lastname: null,
-                imageurl: null,
-                verified: false
-            };
-        }
+        var decoded = payload;
+
+        this.propStore = {
+            loggedIn: true,
+            attempts: 0,
+            user: decoded.user,
+            jwt: decoded.token,
+            group: decoded.group,
+            email: decoded.email,
+            firstname: decoded.firstname,
+            lastname: decoded.lastname,
+            imageurl: decoded.imageurl,
+            verified: decoded.verified,
+            errormessage: null
+        };
         this.emitChange();
     }
+
     loginFailedAction(payload) {
+        var attemptincrement= 1;
+        var errormessage = "";
+
+        if (payload != undefined){
+            if (payload.message === "XMLHttpRequest timeout")
+            {
+                debugauth("loginFailedAction -  Timeout detected!");
+                attemptincrement = 0;
+                errormessage = "Login request timed out!"
+            }
+        }
         this.propStore = {
             loggedIn: false,
-            attempts: this.propStore.attempts +1,
+            attempts: this.propStore.attempts +attemptincrement,
             user: null,
             jwt: null,
             email: null,
@@ -67,7 +65,8 @@ class AuthenticationStore extends BaseStore {
             firstname: null,
             lastname: null,
             imageurl: null,
-            verified: false
+            verified: false,
+            errormessage: errormessage
         };
 
         this.emitChange();
@@ -83,7 +82,8 @@ class AuthenticationStore extends BaseStore {
             firstname: null,
             lastname: null,
             imageurl: null,
-            verified: false
+            verified: false,
+            errormessage: null
         };
         this.emitChange();
     }
