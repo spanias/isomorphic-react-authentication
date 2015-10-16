@@ -18,32 +18,26 @@ Register the Authentication Service in server.js
 
 	fetchrPlugin.registerService(require('isomorphic-react-authentication').AuthenticationService);	
 	
-For a custom authentication function the following is needed in server.js
-    
-    var jwt = require('jsonwebtoken');
+For a custom data connections the following is needed in server.js
+
     var AuthenticationService = require('isomorphic-react-authentication').AuthenticationService;
-    var authFunc = function(params,callback){
-        var key = 'private';
-        if (params.username === "spanias" && params.password === "itworks") {
-            console.log("AuthenticationService: Authentication Successful!");
-            var token = jwt.sign({
-                user: 'spanias',
-                group: 'administrator',
-                email: 'demetris@spanias.com',
-                verified: false
-            }, key);
-            callback(null, token);
-        }
-        else {
-            console.log("AuthenticationService: Authentication Failed!");
-            var err = {errorID: 1, message: 'Authentication Failed'};
-            callback(err, null)
-        }
-    };
-    AuthenticationService.setAuthenticateMethod(authFunc);
+    var AWSDynamoDBConnector = require ('./app/modules/authenticationModuleServer/index').AWSDynamoDBConnector;
     
+    var readonly_dynamocredentials = require('./dynamodbuserreadonly.json');
+    var full_dynamocredentials = require('./dynamodbuser.json');
+    var readonly_connector = new AWSDynamoDBConnector(readonly_dynamocredentials, true);
+    var full_connector = new AWSDynamoDBConnector(full_dynamocredentials, false);
+    AuthenticationService.setDataConnectors(full_connector, readonly_connector);
     fetchrPlugin.registerService(AuthenticationService);
 
+This connects an AWSDynamoDBConnector to the Authentication Service.
+
+Credentials are provided in the files dynamodbuserreadonly.json and dynamodbuser.json
+
+	dynamodbuserreadonly.json contains { "accessKeyId": "readonlyaccessid", "secretAccessKey": "key", "region": "eu-west-1" }
+	dynamodbuser.json contains { "accessKeyId": "fullaccessid", "secretAccessKey": "otherkey", "region": "eu-west-1" }
+
+We need two credentials one with full access and the other one with readonly access. This is done for security reasons.
 
 Use the store in app.js
 
